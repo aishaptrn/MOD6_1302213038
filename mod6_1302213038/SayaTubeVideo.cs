@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics.Contracts;
 
 namespace mod6_1302213038
 {
@@ -14,6 +15,9 @@ namespace mod6_1302213038
 
         public SayaTubeVideo(string title)
         {
+            Contract.Requires(title.Length <= 200);
+            Contract.Requires(title != null);
+            
             this.title = title;
             Random random = new Random();
             this.id = random.Next(10000, 99999);
@@ -22,7 +26,20 @@ namespace mod6_1302213038
 
         public void increasePlayCount(int playCount)
         {
-            this.playCount += playCount;
+            Contract.Requires(playCount > 0 && playCount <= 25000000);
+
+            try
+            {
+                checked
+                {
+                    this.playCount += playCount;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error! " + ex.Message);
+            }
         }
 
         public void printVideoDetails()
